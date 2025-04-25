@@ -157,6 +157,9 @@ int main(void)
 	MX_TIM3_Init();
 	MX_I2C1_Init();
 	/* USER CODE BEGIN 2 */
+	I2C_LCD_Init(MyI2C_LCD);
+	I2C_LCD_Clear(MyI2C_LCD);
+	mostrar_menu();
 
 	/* USER CODE END 2 */
 
@@ -425,26 +428,27 @@ void mostrar_menu(void)
     switch(estado_actual) {
         case MENU_VJERINGA:
             sprintf(buffer, "Vol Jer[ml]:%.1f", parametros.vol_jeringa);
-            break;
+        break;
         case MENU_VDISPENSAR:
             sprintf(buffer, "Vol Disp[ml]:%.1f", parametros.vol_dispensar);
-            break;
+        break;
         case MENU_CAUDAL:
             sprintf(buffer, "Caudal[ml/min]:%.1f", parametros.caudal);
-            break;
+        break;
         case MENU_DIAM_LARGO:
             if (parametros.diametro > 0)
                 sprintf(buffer, "Diam[mm]:%.2f", parametros.diametro);
             else
                 sprintf(buffer, "Largo[mm]:%.2f", parametros.largo);
-            break;
+        break;
         case MENU_CONFIRMAR:
             sprintf(buffer, "Iniciar");
-            break;
+        break;
         case MENU_EJECUTANDO:
             sprintf(buffer, "Ejecutando...");
-            break;
-        default: return;
+        break;
+        default:
+        	return;
     }
 
     I2C_LCD_SetCursor(MyI2C_LCD, 0, 0);
@@ -537,13 +541,13 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 		switch(GPIO_Pin)
 		{
 			case BTN_DOWN_Pin:
-
+				 decrementar_valor();
 			break;
 			case BTN_SELECT_Pin:
-
+				boton_select_callback();
 			break;
 			case BTN_UP_Pin:
-
+				incrementar_valor();
 			break;
 		}
 		last_interrupt_time = interrup_time;
